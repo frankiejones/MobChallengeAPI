@@ -4,10 +4,11 @@ const hbs = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser')
 const apiMob = require('./lib/api');
+const fileUpload = require('express-fileupload');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(fileUpload());
 
 app.engine('.hbs', hbs({
     defaultLayout: 'layout',
@@ -20,23 +21,24 @@ app.get('/', async (req, res) => { // localhost:3000/ home page
     res.render('index');
 });
 
-app.post('/', function(req, res) {
-    console.log(req.files);
-    console.log(req.files.picture);
-    let picture = req.files.picture // the uploaded file object
-    res.render('pictures', {picture}); 
-  });
-
-
 app.get('/pictures', async (req, res) => { // localhost:3000/ home page
-    res.render('pictures');
+    res.render('pictures')
+    res.sendFile(__dirname + '/pictures.hbs');
 });
 
+app.post('/pictures', (req, res) => {
+    // var img = req.body.picture;
+    let img = req.body.picture;
+    console.log(img);
 
+    // img.mv(__dirname + `./public/img/${img}`, function(err) {
+    //     if (err)
+    //         return res.status(500).send(err);
+    //     res.send('File uploaded!');
+    // });
 
-
-
-
+    res.render('pictures', {img});
+});
 
 
 
