@@ -21,8 +21,10 @@ app.get('/', async (req, res) => { // localhost:3000/ home page
 });
 
 app.post('/', function(req, res) {
-    console.log(req.files.foo); // the uploaded file object
-    res.render('pictures'); 
+    console.log(req.files);
+    console.log(req.files.picture);
+    let picture = req.files.picture // the uploaded file object
+    res.render('pictures', {picture}); 
   });
 
 
